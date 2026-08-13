@@ -1,0 +1,12 @@
+.caseToolBarContainer {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+  }
+.caseFilter{
+    width: 1000px;
+}
+.addCaseBtn{
+    background-color: transparent;
+    border: none;
+}

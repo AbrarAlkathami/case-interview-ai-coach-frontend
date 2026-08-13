@@ -1,0 +1,25 @@
+.caseCard{
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 8px;   
+}
+
+.caseCardTitle{
+    font-size: small;
+    padding: 2%;
+    text-align: center;
+
+}
+
+.caseCardBadges{
+    display: flex;
+    justify-content: center;
+    font-size: x-small;
+    gap: 4px;
+}
+.caseCardActions{
+    display: flex;
+    justify-content: left;
+    gap: 4px;
+    margin: 8px;
+}

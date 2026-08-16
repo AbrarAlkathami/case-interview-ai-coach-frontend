@@ -1,9 +1,10 @@
-import CasesPage from "./pages/casesPage/CasesPage";
+import { Outlet } from "react-router";
+
 function App() {
   return (
-    <>
-      <CasesPage />{" "}
-    </>
+    <div>
+      <Outlet />
+    </div>
   );
 }
 

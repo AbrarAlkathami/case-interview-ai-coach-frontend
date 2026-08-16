@@ -2,7 +2,7 @@ import Badge from "../../../../components/common/Badge/Badge";
 import Button from "../../../../components/common/Button/Button";
 import style from "../caseCard/CaseCard.module.css";
 
-interface CaseCardProps {
+export interface CaseProps {
   id: number;
   caseName: string;
   caseType: string;
@@ -10,12 +10,7 @@ interface CaseCardProps {
   difficulty: string;
 }
 
-function CaseCard({
-  caseName,
-  caseType,
-  companyName,
-  difficulty,
-}: CaseCardProps) {
+function CaseCard({ caseName, caseType, companyName, difficulty }: CaseProps) {
   const caseDetails = [caseType, difficulty, companyName];
   return (
     <div className={style.caseCard}>

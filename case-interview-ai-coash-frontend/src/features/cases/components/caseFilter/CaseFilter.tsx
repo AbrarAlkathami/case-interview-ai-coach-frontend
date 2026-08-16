@@ -1,26 +1,18 @@
-import { useState } from "react";
-import type { ChangeEvent } from "react";
-import style from "../caseFilter/CaseFilter.module.css";
+import SearchInput from "../../../../components/common/SearchInput/SearchInput";
 
-interface FilterProps {
-  search?: string;
+interface CaseFilterProps {
+  searchQuery: string;
+  onSearchChange: (value: string) => void;
 }
 
-function CaseFilter() {
-  const [search, setSearch] = useState<FilterProps | null>(null);
-
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setSearch({ search: e.target.value });
-  };
-
+function CaseFilter({ searchQuery, onSearchChange }: CaseFilterProps) {
   return (
-    <input
-      className={style.searchInput}
-      type="search"
+    <SearchInput
       placeholder="Search cases..."
-      value={search?.search ?? ""}
-      onChange={handleChange}
+      value={searchQuery}
+      onChange={(e) => onSearchChange(e.target.value)}
     />
   );
 }
+
 export default CaseFilter;

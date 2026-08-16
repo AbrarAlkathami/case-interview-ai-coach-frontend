@@ -1,0 +1,56 @@
+.formContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-height: 100vh;
+    
+}
+.formContainer form {
+    width: 400px;
+  }
+
+.formContainer h2 {
+    width: 600px;
+    justify-content: center;
+}
+
+
+.formHeader {
+    text-align: center;
+}
+
+.formControl{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 10px;
+    width: 100%;
+}
+
+.submitForm {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+  }
+
+  .loginButton {
+    width: 200px;
+    height: 45px;
+    border: solid 1px;
+    border-radius: 7px;
+    background-color: transparent;
+  }
+
+  .actions{
+    font-size: small;
+    padding: 10px;
+  }
+
+  .errorMessage {
+    color: red;
+
+    text-align: center;
+    margin-top: 8px;
+  }

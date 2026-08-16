@@ -2,11 +2,13 @@ import style from "../Button/Button.module.css";
 
 interface ButtonProps {
   children: React.ReactNode;
+  className?: string;
+  type?: "button" | "submit" | "reset";
 }
 
-function Button({ children }: ButtonProps) {
+function Button({ children, className = "btn", type = "button" }: ButtonProps) {
   return (
-    <button type="button" className={style.btn}>
+    <button type={type} className={`${style.btn} ${className ?? ""}`}>
       {children}
     </button>
   );

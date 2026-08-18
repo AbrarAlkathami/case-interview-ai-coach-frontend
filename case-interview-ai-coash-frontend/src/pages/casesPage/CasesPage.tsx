@@ -1,8 +1,9 @@
 import { useState } from "react";
-
 import CasesGrid from "../../features/cases/components/casesGrid/CasesGrid";
 import CasesToolBar from "../../features/cases/components/casesToolBar/CasesToolbar";
 import style from "../casesPage/CasesPage.module.css";
+import Modal from "../../components/common/Modal/Modal";
+import type { FieldProps } from "../../components/common/Modal/Modal";
 const mockCases = [
   {
     id: 0,
@@ -145,20 +146,60 @@ const mockCases = [
     difficulty: "Easy",
   },
 ];
+const caseModalFields: FieldProps[] = [
+  {
+    name: "caseName",
+    label: "Case Name",
+    fieldType: "text",
+    placeholder: "Enter case name",
+    required: true,
+  },
+  {
+    name: "caseType",
+    label: "Case Type",
+    fieldType: "text",
+    placeholder: "Enter case type",
+    required: true,
+  },
+  {
+    name: "companyName",
+    label: "Company Name",
+    fieldType: "text",
+    placeholder: "Enter company name",
+    required: true,
+  },
+  {
+    name: "caseType",
+    label: "Case Type",
+    fieldType: "select",
+    options: ["Market Entry", "Profitability", "Market Sizing"],
+    required: true,
+  },
+];
 
 function CasesPage() {
   const [searchQuery, setSearchQuery] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
 
   const filteredCases = mockCases.filter((caseItem) =>
     caseItem.caseName.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
+  const handleAddCase = () => {
+    setIsOpen(true);
+    console.log(isOpen);
+  };
+
   return (
     <div className={style.conatiner}>
+      {isOpen && (
+        <Modal fields={caseModalFields} onClose={() => setIsOpen(false)} />
+      )}
       <div className={style.filterBar}>
         <CasesToolBar
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
+          onAddCase={handleAddCase}
         />
       </div>
 

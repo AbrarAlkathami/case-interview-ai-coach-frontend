@@ -5,9 +5,14 @@ import Button from "../../../../components/common/Button/Button";
 interface CasesToolBarProps {
   searchQuery: string;
   onSearchChange: (value: string) => void;
+  onAddCase: () => void;
 }
 
-function CasesToolBar({ searchQuery, onSearchChange }: CasesToolBarProps) {
+function CasesToolBar({
+  searchQuery,
+  onSearchChange,
+  onAddCase,
+}: CasesToolBarProps) {
   return (
     <div className={style.caseToolBarContainer}>
       <div className={style.caseFilter}>
@@ -15,7 +20,9 @@ function CasesToolBar({ searchQuery, onSearchChange }: CasesToolBarProps) {
       </div>
 
       <div className={style.addCaseBtn}>
-        <Button>+ Case</Button>
+        <Button type="button" onClick={onAddCase}>
+          + Case
+        </Button>
       </div>
     </div>
   );

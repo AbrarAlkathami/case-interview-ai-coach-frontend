@@ -1,0 +1,39 @@
+.container{
+    position: fixed;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.modal{
+    background-color: rgb(189, 189, 189);
+    border: 1px;
+    border-radius: 10px;
+    padding: 20px;
+    width: 80%;
+}
+.modalHeader{
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 15px;
+}
+.modalBody{
+    display: flex;
+    flex-direction: column;
+gap: 10px;
+}
+
+.modalFooter{
+    margin-top: 15px;
+    display: flex;
+    justify-content: right;
+    
+}
+
+.fieldLabel{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 0px;
+
+}

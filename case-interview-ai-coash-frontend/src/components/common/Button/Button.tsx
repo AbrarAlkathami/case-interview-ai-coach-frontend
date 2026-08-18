@@ -4,11 +4,21 @@ interface ButtonProps {
   children: React.ReactNode;
   className?: string;
   type?: "button" | "submit" | "reset";
+  onClick?: () => void;
 }
 
-function Button({ children, className = "btn", type = "button" }: ButtonProps) {
+function Button({
+  children,
+  className = "btn",
+  type = "button",
+  onClick,
+}: ButtonProps) {
   return (
-    <button type={type} className={`${style.btn} ${className ?? ""}`}>
+    <button
+      type={type}
+      onClick={onClick}
+      className={`${style.btn} ${className ?? ""}`}
+    >
       {children}
     </button>
   );

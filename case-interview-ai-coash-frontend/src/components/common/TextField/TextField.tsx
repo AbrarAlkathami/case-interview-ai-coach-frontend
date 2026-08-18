@@ -1,7 +1,7 @@
 import style from "./TextField.module.css";
 
 interface TextFieldProps {
-  placeholder: string;
+  placeholder?: string;
   type: "text" | "email" | "password";
   value: string;
   required?: boolean;

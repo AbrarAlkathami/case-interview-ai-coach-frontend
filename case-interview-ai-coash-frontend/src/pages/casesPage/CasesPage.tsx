@@ -3,150 +3,15 @@ import CasesGrid from "../../features/cases/components/casesGrid/CasesGrid";
 import CasesToolBar from "../../features/cases/components/casesToolBar/CasesToolbar";
 import style from "../casesPage/CasesPage.module.css";
 import Modal from "../../components/common/Modal/Modal";
-import type { FieldProps } from "../../components/common/Modal/Modal";
-const mockCases = [
-  {
-    id: 0,
-    caseName: "Beautify",
-    caseType: "Digital Transformation",
-    companyName: "McKinsey & Company",
-    difficulty: "Medium",
-  },
-  {
-    id: 1,
-    caseName: "Diconsa",
-    caseType: "Public Sector Strategy",
-    companyName: "McKinsey & Company",
-    difficulty: "Medium",
-  },
-  {
-    id: 2,
-    caseName: "Electro-Light",
-    caseType: "Product Launch",
-    companyName: "McKinsey & Company",
-    difficulty: "Medium",
-  },
-  {
-    id: 3,
-    caseName: "Talbot Trucks",
-    caseType: "Market Entry",
-    companyName: "McKinsey & Company",
-    difficulty: "Hard",
-  },
-  {
-    id: 4,
-    caseName: "Set a Climate Strategy",
-    caseType: "Sustainability Strategy",
-    companyName: "BCG",
-    difficulty: "Medium",
-  },
-  {
-    id: 5,
-    caseName: "Restore Customer Satisfaction",
-    caseType: "Digital Strategy",
-    companyName: "BCG",
-    difficulty: "Medium",
-  },
-  {
-    id: 6,
-    caseName: "Support a Cloud Migration",
-    caseType: "Technology Transformation",
-    companyName: "BCG",
-    difficulty: "Medium",
-  },
-  {
-    id: 7,
-    caseName: "Coffee Shop Co.",
-    caseType: "Market Entry",
-    companyName: "Bain & Company",
-    difficulty: "Easy",
-  },
-  {
-    id: 8,
-    caseName: "FashionCo.",
-    caseType: "Profitability",
-    companyName: "Bain & Company",
-    difficulty: "Medium",
-  },
-  {
-    id: 9,
-    caseName: "Promotional Planning",
-    caseType: "Pricing & Promotion",
-    companyName: "Kearney",
-    difficulty: "Medium",
-  },
-  {
-    id: 10,
-    caseName: "Supermarket Pharmacy",
-    caseType: "Profitability",
-    companyName: "Oliver Wyman",
-    difficulty: "Medium",
-  },
-  {
-    id: 11,
-    caseName: "Oil & Gas Price Strategy",
-    caseType: "Growth Strategy",
-    companyName: "Oliver Wyman",
-    difficulty: "Medium",
-  },
-  {
-    id: 12,
-    caseName: "Dairy Farm",
-    caseType: "Private Equity",
-    companyName: "Oliver Wyman",
-    difficulty: "Medium",
-  },
-  {
-    id: 13,
-    caseName: "Autism Digital Device",
-    caseType: "Pricing Strategy",
-    companyName: "Oliver Wyman",
-    difficulty: "Medium",
-  },
-  {
-    id: 14,
-    caseName: "Poseidon Water Park",
-    caseType: "Market Sizing",
-    companyName: "Oliver Wyman",
-    difficulty: "Medium",
-  },
-  {
-    id: 15,
-    caseName: "Digital Transformation at a Large Financial Institution",
-    caseType: "Digital Transformation",
-    companyName: "PwC",
-    difficulty: "Hard",
-  },
-  {
-    id: 16,
-    caseName: "Exploring a Healthcare Expansion Strategy",
-    caseType: "Mergers & Acquisitions",
-    companyName: "PwC",
-    difficulty: "Hard",
-  },
-  {
-    id: 17,
-    caseName: "Kitchen Furnishings Market Share",
-    caseType: "Competitive Strategy",
-    companyName: "Accenture",
-    difficulty: "Medium",
-  },
-  {
-    id: 18,
-    caseName: "Fresh Prepared Meal Business",
-    caseType: "Profitability",
-    companyName: "Accenture",
-    difficulty: "Hard",
-  },
-  {
-    id: 19,
-    caseName: "Dry Cleaners in Philadelphia",
-    caseType: "Market Sizing",
-    companyName: "Accenture",
-    difficulty: "Easy",
-  },
-];
-const caseModalFields: FieldProps[] = [
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { fetchCases, addCase, deleteCase, type Case } from "../../api/cases";
+import AddCaseForm, {
+  type FieldProps,
+} from "../../features/cases/components/addCaseForm/AddCaseForm";
+import CaseContent from "../../features/cases/components/caseContent/CaseContent";
+import type { CaseCreate } from "../../api/cases";
+
+const fields: FieldProps[] = [
   {
     name: "caseName",
     label: "Case Name",
@@ -157,8 +22,8 @@ const caseModalFields: FieldProps[] = [
   {
     name: "caseType",
     label: "Case Type",
-    fieldType: "text",
-    placeholder: "Enter case type",
+    fieldType: "select",
+    options: ["Market Entry", "Profitability", "Market Sizing"],
     required: true,
   },
   {
@@ -166,35 +31,90 @@ const caseModalFields: FieldProps[] = [
     label: "Company Name",
     fieldType: "text",
     placeholder: "Enter company name",
+  },
+  {
+    name: "difficulty",
+    label: "Difficulty",
+    fieldType: "select",
+    options: ["Easy", "Medium", "Hard"],
     required: true,
   },
   {
-    name: "caseType",
-    label: "Case Type",
-    fieldType: "select",
-    options: ["Market Entry", "Profitability", "Market Sizing"],
+    name: "caseContent",
+    label: "Case Content",
+    fieldType: "textarea",
+    placeholder: "Enter case content",
     required: true,
   },
 ];
 
 function CasesPage() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [isOpen, setIsOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedCaseId, setSelectedCaseId] = useState<number | null>(null);
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
 
-  const filteredCases = mockCases.filter((caseItem) =>
+  const queryClient = useQueryClient();
+
+  const handleAddCase = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleOpenDetails = (caseId: number) => {
+    setSelectedCaseId(caseId);
+    setIsDetailsOpen(true);
+  };
+
+  const { data: cases = [], isLoading } = useQuery({
+    queryFn: () => fetchCases(),
+    queryKey: ["cases"],
+  });
+
+  const { mutateAsync: addCaseMutation } = useMutation({
+    mutationFn: addCase,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["cases"] });
+    },
+  });
+  const { mutateAsync: deleteCaseMutation } = useMutation({
+    mutationFn: deleteCase,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["cases"] });
+    },
+  });
+
+  const handleDeleteCase = async (caseId: number) => {
+    setSelectedCaseId(caseId);
+    await deleteCaseMutation(caseId);
+  };
+  const handleSubmitCase = async (caseData: CaseCreate) => {
+    await addCaseMutation(caseData);
+
+    setIsModalOpen(false);
+  };
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  const filteredCases = cases.filter((caseItem) =>
     caseItem.caseName.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
-  const handleAddCase = () => {
-    setIsOpen(true);
-    console.log(isOpen);
-  };
+  const selectedCase = cases.find((caseItem) => caseItem.id === selectedCaseId);
 
   return (
     <div className={style.conatiner}>
-      {isOpen && (
-        <Modal fields={caseModalFields} onClose={() => setIsOpen(false)} />
+      {isModalOpen && (
+        <Modal onClose={() => setIsModalOpen(false)}>
+          <AddCaseForm fields={fields} onSubmit={handleSubmitCase} />
+        </Modal>
       )}
+      {isDetailsOpen && selectedCase && (
+        <Modal onClose={() => setIsDetailsOpen(false)}>
+          <CaseContent content={selectedCase.caseContent} />
+        </Modal>
+      )}
+
       <div className={style.filterBar}>
         <CasesToolBar
           searchQuery={searchQuery}
@@ -202,9 +122,12 @@ function CasesPage() {
           onAddCase={handleAddCase}
         />
       </div>
-
       <div>
-        <CasesGrid mockCases={filteredCases} />
+        <CasesGrid
+          cases={filteredCases}
+          onOpenDetails={handleOpenDetails}
+          onDeleteCase={handleDeleteCase}
+        />
       </div>
     </div>
   );

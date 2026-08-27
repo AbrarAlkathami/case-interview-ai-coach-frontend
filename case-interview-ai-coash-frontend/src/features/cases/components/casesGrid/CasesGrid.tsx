@@ -1,29 +1,27 @@
 import CaseCard from "../caseCard/CaseCard";
 import style from "../casesGrid/CasesGrid.module.css";
-
-interface CaseItem {
-  id: number;
-  caseName: string;
-  caseType: string;
-  companyName: string;
-  difficulty: string;
-}
+import type { Case } from "../../../../api/cases";
 
 interface CasesGridProps {
-  mockCases: CaseItem[];
+  cases: Case[];
+  onOpenDetails: (caseId: number) => void;
+  onDeleteCase: (caseId: number) => void;
 }
 
-function CasesGrid({ mockCases }: CasesGridProps) {
+function CasesGrid({ cases, onOpenDetails, onDeleteCase }: CasesGridProps) {
   return (
     <div className={style.caseCardsRow}>
-      {mockCases.map((caseItem) => (
+      {cases.map((caseItem) => (
         <div className={style.caseCardsCol} key={caseItem.id}>
           <CaseCard
             id={caseItem.id}
             caseName={caseItem.caseName}
             caseType={caseItem.caseType}
-            companyName={caseItem.companyName}
             difficulty={caseItem.difficulty}
+            caseContent={caseItem.caseContent}
+            structuredMetadata={caseItem.structuredMetadata}
+            onOpenDetails={onOpenDetails}
+            onDeleteCase={onDeleteCase}
           />
         </div>
       ))}

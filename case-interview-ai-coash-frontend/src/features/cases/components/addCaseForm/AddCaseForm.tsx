@@ -4,7 +4,7 @@ import Button from "../../../../components/common/Button/Button";
 import style from "../addCaseForm/AddCaseForm.module.css";
 import DropdownList from "../../../../components/common/DropdownList/DropdownList";
 import type { CaseCreate } from "../../../../api/cases";
-import MarkdownTextArea from "../../../../components/common/TextArea/TextArea";
+import MarkdownTextArea from "../../../../components/common/TextArea/MarkdownTextArea.module";
 
 export interface FieldProps {
   name: string;
